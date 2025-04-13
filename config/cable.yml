@@ -9,7 +9,9 @@ test:
   adapter: test
 
 production:
-  adapter: solid_cable
+  adapter: postgresql
+  url: <%= ENV.fetch("DATABASE_URL") { "postgres://localhost:5432/whispr_production" } %>
+  channel_prefix: whispr_production
   connects_to:
     database:
       writing: cable
