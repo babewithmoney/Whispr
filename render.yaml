@@ -11,6 +11,26 @@ services:
         fromDatabase:
           name: whispr_production
           property: connectionString
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: whispr_production
+          property: host
+      - key: DATABASE_PORT
+        fromDatabase:
+          name: whispr_production
+          property: port
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: whispr_production
+          property: database
+      - key: DATABASE_USER
+        fromDatabase:
+          name: whispr_production
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: whispr_production
+          property: password
       - key: RAILS_ENV
         value: production
       - key: RAILS_LOG_TO_STDOUT
