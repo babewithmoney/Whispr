@@ -83,3 +83,8 @@ production:
   url: <%= ENV['DATABASE_URL'] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
   # Remove other settings as they will be provided by the DATABASE_URL
+
+production_queue:
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
