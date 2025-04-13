@@ -1,0 +1,30 @@
+<div class="max-w-4xl mx-auto">
+  <div class="flex justify-between items-center mb-8">
+    <h1 class="text-3xl font-bold text-gray-900">Whispr</h1>
+    <div class="flex space-x-4">
+      <%= link_to "Recent", root_path, class: "px-4 py-2 rounded-lg #{params[:tab].nil? ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}" %>
+      <%= link_to "Trending", root_path(tab: 'trending'), class: "px-4 py-2 rounded-lg #{params[:tab] == 'trending' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}" %>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-lg shadow-md p-6 mb-8">
+    <h2 class="text-xl font-semibold mb-4">Share Your Confession</h2>
+    <%= form_with(model: @confession, class: "space-y-4") do |f| %>
+      <div>
+        <%= f.text_area :body, 
+            class: "w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500", 
+            rows: 4, 
+            placeholder: "What's on your mind? (max 500 characters)", 
+            maxlength: 500 %>
+      </div>
+      <div class="flex justify-end">
+        <%= f.submit "Share Anonymously", 
+            class: "px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2" %>
+      </div>
+    <% end %>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <%= render partial: "confession", collection: @confessions %>
+  </div>
+</div>
