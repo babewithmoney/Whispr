@@ -2,45 +2,23 @@
 # Force ActiveRecord to establish connection via TCP
 Rails.application.config.after_initialize do
   if Rails.env.production?
-    ActiveRecord::Base.establish_connection(
-      ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: "primary").configuration_hash.merge(
-        host: ENV.fetch('DATABASE_HOST', 'localhost'),
-        port: ENV.fetch('DATABASE_PORT', 5432),
-        adapter: 'postgresql',
-        sslmode: 'require'
-      )
+    # Set PostgreSQL environment variables to force TCP
+    ENV['PGSSLMODE'] = 'require'
+    
+    # Override only the base ActiveRecord connection since others will inherit
+    ActiveRecord::Base.connection_handler.retrieve_connection_pool("ActiveRecord::Base").disconnect!
+    
+    # Get the configuration from database.yml
+    config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: "primary").configuration_hash.merge(
+      host: ENV.fetch('DATABASE_HOST', 'localhost'),
+      port: ENV.fetch('DATABASE_PORT', 5432),
+      adapter: 'postgresql'
     )
     
-    # Force queue connection too if it exists
-    if defined?(SolidQueue)
-      begin
-        SolidQueue::Record.establish_connection(
-          ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: "queue").configuration_hash.merge(
-            host: ENV.fetch('DATABASE_HOST', 'localhost'),
-            port: ENV.fetch('DATABASE_PORT', 5432),
-            adapter: 'postgresql',
-            sslmode: 'require'
-          )
-        )
-      rescue => e
-        Rails.logger.error("Failed to establish queue connection: #{e.message}")
-      end
-    end
+    # Establish the connection
+    ActiveRecord::Base.establish_connection(config)
     
-    # Force cache connection too if it exists
-    if defined?(SolidCache)
-      begin
-        SolidCache::Record.establish_connection(
-          ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: "cache").configuration_hash.merge(
-            host: ENV.fetch('DATABASE_HOST', 'localhost'),
-            port: ENV.fetch('DATABASE_PORT', 5432),
-            adapter: 'postgresql',
-            sslmode: 'require'
-          )
-        )
-      rescue => e
-        Rails.logger.error("Failed to establish cache connection: #{e.message}")
-      end
-    end
+    # We'll let SolidQueue and SolidCache handle their own connections through database.yml
+    Rails.logger.info "Database connection established using TCP with host: #{config[:host]} and port: #{config[:port]}"
   end
 end

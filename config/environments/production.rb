@@ -46,15 +46,13 @@ Rails.application.configure do
   # Don't log any deprecations.
   config.active_support.report_deprecations = false
 
-  # Replace the default in-process memory cache store with a durable alternative.
-  config.cache_store = :solid_cache_store
+  # Use the default cache store for now to avoid conflicts with solid_cache setup
+  # We'll configure solid_cache after deployment succeeds
+  config.cache_store = :memory_store
 
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
-  
-  # Configure SolidCache to use explicit TCP connection
-  config.solid_cache.connects_to = { database: { writing: :cache } }
 
   # Explicitly set database connection options to ensure TCP connections
   config.active_record.database_configuration_file = Rails.root.join('config/database.yml')
