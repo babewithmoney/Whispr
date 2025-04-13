@@ -79,25 +79,7 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
-  primary: &primary_production
-    <<: *default
-    url: <%= ENV['DATABASE_URL'] %>
-    database: whispr_production
-    username: whispr
-    password: <%= ENV['DATABASE_PASSWORD'] %>
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
-  primary_replica:
-    <<: *primary_production
-    replica: true
-  cache:
-    <<: *primary_production
-    url: <%= ENV['DATABASE_URL'] %>
-    database: whispr_production
-  queue:
-    <<: *primary_production
-    url: <%= ENV['DATABASE_URL'] %>
-    database: whispr_production
-  cable:
-    <<: *primary_production
-    url: <%= ENV['DATABASE_URL'] %>
-    database: whispr_production
+  <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+  # Remove other settings as they will be provided by the DATABASE_URL
