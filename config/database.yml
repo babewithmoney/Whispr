@@ -19,10 +19,17 @@ default: &default
   # https://guides.rubyonrails.org/configuring.html#database-pooling
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
 
+# Queue database configuration
+queue: &queue
+  <<: *default
+  migrations_paths: db/solid_queue_migrate
 
 development:
   <<: *default
   database: whispr_development
+  queue:
+    <<: *queue
+    database: whispr_queue_development
 
   # The specified database role being used to connect to PostgreSQL.
   # To create additional roles in PostgreSQL see `$ createuser --help`.
@@ -57,6 +64,9 @@ development:
 test:
   <<: *default
   database: whispr_test
+  queue:
+    <<: *queue
+    database: whispr_queue_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -82,9 +92,8 @@ production:
   <<: *default
   url: <%= ENV['DATABASE_URL'] %>
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
+  queue:
+    <<: *queue
+    url: <%= ENV['QUEUE_DATABASE_URL'] || ENV['DATABASE_URL'] %>
+    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
   # Remove other settings as they will be provided by the DATABASE_URL
-
-production_queue:
-  <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
-  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
