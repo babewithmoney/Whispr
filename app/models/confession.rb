@@ -7,7 +7,7 @@ class Confession < ApplicationRecord
   scope :recent, -> { order(created_at: :desc) }
   scope :trending, -> {
     select("confessions.*, 
-            (reactions_count + (extract(epoch from now() - created_at) / 3600)^(-1.8)) as trending_score")
+            (reactions_count * 10.0 + 100.0 / (1 + extract(epoch from now() - created_at) / 3600.0)) as trending_score")
       .order("trending_score DESC")
   }
 
