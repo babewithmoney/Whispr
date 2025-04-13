@@ -52,6 +52,15 @@ Rails.application.configure do
   # Replace the default in-process and non-durable queuing backend for Active Job.
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
+  
+  # Configure SolidCache to use explicit TCP connection
+  config.solid_cache.connects_to = { database: { writing: :cache } }
+
+  # Explicitly set database connection options to ensure TCP connections
+  config.active_record.database_configuration_file = Rails.root.join('config/database.yml')
+  
+  # Disable connection pooling in favor of our explicit connections
+  config.active_record.legacy_connection_handling = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.

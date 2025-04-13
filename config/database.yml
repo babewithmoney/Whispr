@@ -100,29 +100,36 @@ test:
 #
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
+  adapter: postgresql
+  encoding: unicode
+  host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
+  port: <%= ENV.fetch('DATABASE_PORT') { 5432 } %>
+  database: <%= ENV.fetch('DATABASE_NAME') { 'whispr_production' } %>
+  username: <%= ENV.fetch('DATABASE_USER') { 'postgres' } %>
+  password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
+  sslmode: require
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
-  host: <%= ENV['DATABASE_HOST'] || ENV['POSTGRESQL_HOST'] %>
-  port: <%= ENV['DATABASE_PORT'] || 5432 %>
-  database: <%= ENV['DATABASE_NAME'] || 'whispr_production' %>
-  username: <%= ENV['DATABASE_USER'] || ENV['POSTGRESQL_USER'] %>
-  password: <%= ENV['DATABASE_PASSWORD'] || ENV['POSTGRESQL_PASSWORD'] %>
+  
   queue:
     <<: *queue
-    url: <%= ENV['DATABASE_URL'] %>
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
+    port: <%= ENV.fetch('DATABASE_PORT') { 5432 } %>
+    database: <%= ENV.fetch('DATABASE_NAME') { 'whispr_production' } %>
+    username: <%= ENV.fetch('DATABASE_USER') { 'postgres' } %>
+    password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
+    sslmode: require
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
-    host: <%= ENV['DATABASE_HOST'] || ENV['POSTGRESQL_HOST'] %>
-    port: <%= ENV['DATABASE_PORT'] || 5432 %>
-    database: <%= ENV['DATABASE_NAME'] || 'whispr_production' %>
-    username: <%= ENV['DATABASE_USER'] || ENV['POSTGRESQL_USER'] %>
-    password: <%= ENV['DATABASE_PASSWORD'] || ENV['POSTGRESQL_PASSWORD'] %>
+    
   cache:
     <<: *cache
-    url: <%= ENV['DATABASE_URL'] %>
+    adapter: postgresql
+    encoding: unicode
+    host: <%= ENV.fetch('DATABASE_HOST') { 'localhost' } %>
+    port: <%= ENV.fetch('DATABASE_PORT') { 5432 } %>
+    database: <%= ENV.fetch('DATABASE_NAME') { 'whispr_production' } %>
+    username: <%= ENV.fetch('DATABASE_USER') { 'postgres' } %>
+    password: <%= ENV.fetch('DATABASE_PASSWORD') { '' } %>
+    sslmode: require
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 10 } %>
-    host: <%= ENV['DATABASE_HOST'] || ENV['POSTGRESQL_HOST'] %>
-    port: <%= ENV['DATABASE_PORT'] || 5432 %>
-    database: <%= ENV['DATABASE_NAME'] || 'whispr_production' %>
-    username: <%= ENV['DATABASE_USER'] || ENV['POSTGRESQL_USER'] %>
-    password: <%= ENV['DATABASE_PASSWORD'] || ENV['POSTGRESQL_PASSWORD'] %>
-  # Remove other settings as they will be provided by the DATABASE_URL

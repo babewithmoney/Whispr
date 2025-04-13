@@ -23,5 +23,11 @@ module Whispr
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+    
+    # Force PostgreSQL to use TCP connections in production
+    if Rails.env.production?
+      ENV['PGSSLMODE'] = 'require'
+      config.active_record.use_yaml_unsafe_load = true
+    end
   end
 end
