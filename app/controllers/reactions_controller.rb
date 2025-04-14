@@ -6,7 +6,12 @@ class ReactionsController < ApplicationController
 
     respond_to do |format|
       if @reaction.save
-        format.turbo_stream
+        format.turbo_stream do
+          render turbo_stream: [
+            turbo_stream.replace(dom_id(@confession), partial: "confessions/confession", locals: { confession: @confession }),
+            turbo_stream.update("flash", partial: "shared/flash", locals: { message: "Thanks for reacting! 🎉", type: "notice" })
+          ]
+        end
         format.html { redirect_to root_path, notice: 'Thanks for reacting! 🎉' }
       else
         format.turbo_stream do
