@@ -1,6 +1,6 @@
 <div id="<%= dom_id(confession) %>" class="bg-gray-800 rounded-xl shadow-sm p-6 mb-6 relative group hover:shadow-md transition-all duration-200 border border-gray-700">
-  <% if confession.reactions.count >= 50 %>
-    <div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center">
+  <% if confession.reactions.count >= 150 %>
+    <div class="absolute -top-3 right-4 bg-gradient-to-r from-red-500 to-rose-500 text-white text-xs px-3 py-1 rounded-full flex items-center shadow-lg">
       <span class="mr-1">🔥</span>
       <span>Trending</span>
     </div>

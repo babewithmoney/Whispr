@@ -1,16 +1,15 @@
 # Whispr - Anonymous Confessions Platform
 
-Whispr is a modern web application that allows users to share anonymous confessions and interact through emoji reactions. Built with Ruby on Rails and styled with Tailwind CSS, it features a responsive masonry layout and real-time updates.
+Whispr is a web application that allows users to share anonymous confessions and interact through emoji reactions. Built with Ruby on Rails and styled with Tailwind CSS, it features a responsive masonry layout
 
 ## Features
 
-- 🎭 Anonymous confession sharing
-- 👥 No account required
-- 🎨 Modern dark theme UI
-- 📱 Responsive masonry layout
-- ❤️ Interactive emoji reactions
-- 🔥 Trending confessions
-- ⚡ Real-time updates with Turbo
+- Anonymous confession sharing
+- No account required
+- Dark theme UI
+- Responsive masonry layout
+- Interactive emoji reactions
+- Trending confessions
 
 ## Prerequisites
 
@@ -24,7 +23,7 @@ Before you begin, ensure you have the following installed:
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/whispr.git
+   git clone https://github.com/babewithmoney/Whispr
    cd whispr
    ```
 
