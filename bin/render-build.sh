@@ -11,26 +11,15 @@ export PGPASSWORD=${DATABASE_PASSWORD}
 export PGDATABASE=${DATABASE_NAME}
 
 # Install dependencies
+echo "Installing dependencies..."
 bundle install
 
-# Compile assets (with error handling)
-echo "Asset precompilation starting..."
-bundle exec rails assets:precompile RAILS_ENV=production || {
-  echo "Asset precompilation failed, retrying with alternative configuration"
-  # Try running asset precompilation with a simpler configuration
-  bundle exec rake assets:precompile RAILS_ENV=production DISABLE_DATABASE_ENVIRONMENT_CHECK=1
-}
+# Run database migrations
+echo "Running database migrations..."
+bundle exec rails db:migrate
 
-# Clean assets (with error handling)
-echo "Asset cleaning starting..."
-bundle exec rails assets:clean RAILS_ENV=production || {
-  echo "Asset cleaning failed, but proceeding with deployment"
-}
+# Compile assets
+echo "Precompiling assets..."
+bundle exec rails assets:precompile RAILS_ENV=production
 
-# Set up database
-echo "Running migrations..."
-bundle exec rails db:migrate RAILS_ENV=production
-echo "Running seeds (if applicable)..."
-bundle exec rails db:seed RAILS_ENV=production || true
-
-echo "Deployment preparation complete!" 
+echo "Build completed successfully!" 
