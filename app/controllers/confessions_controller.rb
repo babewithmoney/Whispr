@@ -4,7 +4,13 @@ class ConfessionsController < ApplicationController
   def index
     @confession = Confession.new
     @confessions = if params[:tab] == 'trending'
-      Confession.trending.limit(20)
+      # Get top 20 posts by total reactions
+      Confession.joins(:reactions)
+               .group('confessions.id')
+               .select('confessions.*, COUNT(reactions.id) as reactions_count')
+               .having('COUNT(reactions.id) >= ?', 50)
+               .order('reactions_count DESC')
+               .limit(20)
     else
       Confession.recent.limit(20)
     end

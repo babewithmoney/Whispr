@@ -1,6 +1,6 @@
 <div id="<%= dom_id(confession) %>" class="bg-gray-800 rounded-xl shadow-sm p-6 mb-6 relative group hover:shadow-md transition-all duration-200 border border-gray-700">
-  <% if confession.trending? %>
-    <div class="absolute -top-3 -right-2 z-10 inline-flex items-center justify-center px-3 py-1 text-xs font-medium bg-gradient-to-r from-indigo-500 to-purple-500 text-white rounded-full shadow-sm">
+  <% if confession.reactions.count >= 50 %>
+    <div class="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center">
       <span class="mr-1">🔥</span>
       <span>Trending</span>
     </div>
@@ -8,7 +8,7 @@
 
   <div class="flex flex-col space-y-4">
     <div class="flex justify-between items-start gap-4">
-      <p class="text-gray-100 text-base leading-relaxed flex-grow"><%= confession.body %></p>
+      <p class="text-gray-100 text-base leading-relaxed flex-grow pr-4"><%= confession.body %></p>
       <span class="text-xs text-gray-400 font-medium whitespace-nowrap shrink-0">
         <%= time_ago_in_words(confession.created_at) %> ago
       </span>
