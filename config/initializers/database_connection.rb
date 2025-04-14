@@ -5,15 +5,14 @@ if Rails.env.production?
   
   # Configure the database connection
   Rails.application.config.after_initialize do
-    ActiveRecord::Base.connection_pool.disconnect!
-    
     config = {
       adapter: 'postgresql',
-      host: ENV.fetch('DATABASE_HOST', 'localhost'),
-      port: ENV.fetch('DATABASE_PORT', 5432),
-      database: ENV.fetch('DATABASE_NAME', 'whispr_production'),
-      username: ENV.fetch('DATABASE_USERNAME', 'postgres'),
-      password: ENV.fetch('DATABASE_PASSWORD', '')
+      host: ENV['DATABASE_HOST'],
+      port: ENV['DATABASE_PORT'],
+      database: ENV['DATABASE_NAME'],
+      username: ENV['DATABASE_USER'],
+      password: ENV['DATABASE_PASSWORD'],
+      sslmode: 'require'
     }
     
     ActiveRecord::Base.establish_connection(config)
