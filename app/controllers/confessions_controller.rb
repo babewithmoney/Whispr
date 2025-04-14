@@ -4,12 +4,16 @@ class ConfessionsController < ApplicationController
   def index
     @confession = Confession.new
     @confessions = if params[:tab] == 'trending'
-      # Get top 20 posts by total reactions
+      # Get posts ranked by engagement and recency
       Confession.joins(:reactions)
+               .select(
+                 'confessions.*, ' \
+                 'COUNT(reactions.id) as total_reactions, ' \
+                 'EXTRACT(EPOCH FROM (NOW() - confessions.created_at))/3600 as hours_old, ' \
+                 '(COUNT(reactions.id) * 10.0 + 100.0 / (1 + EXTRACT(EPOCH FROM (NOW() - confessions.created_at))/3600)) as trending_score'
+               )
                .group('confessions.id')
-               .select('confessions.*, COUNT(reactions.id) as reactions_count')
-               .having('COUNT(reactions.id) >= ?', 50)
-               .order('reactions_count DESC')
+               .order('trending_score DESC')
                .limit(20)
     else
       Confession.recent.limit(20)
