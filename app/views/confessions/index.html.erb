@@ -26,7 +26,19 @@
     <% end %>
   </div>
 
-  <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 [&>*]:break-inside-avoid-column">
-    <%= render partial: "confession", collection: @confessions %>
-  </div>
+  <% if params[:tab] == 'trending' %>
+    <!-- Top trending posts in 2 columns for better horizontal flow -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+      <%= render partial: "confession", collection: @confessions.first(2) %>
+    </div>
+    <!-- Remaining posts in masonry layout -->
+    <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 [&>*]:break-inside-avoid-column">
+      <%= render partial: "confession", collection: @confessions.offset(2) %>
+    </div>
+  <% else %>
+    <!-- Regular masonry layout for recent posts -->
+    <div class="columns-1 sm:columns-2 md:columns-3 gap-6 space-y-6 [&>*]:break-inside-avoid-column">
+      <%= render partial: "confession", collection: @confessions %>
+    </div>
+  <% end %>
 </div>
