@@ -1,0 +1,20 @@
+@import "tailwindcss/preflight";
+@import "tailwindcss/utilities";
+
+@layer utilities {
+  .animate-burst {
+    animation: burst 0.5s cubic-bezier(0.12, 0, 0.39, 0);
+  }
+}
+
+@keyframes burst {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.4);
+  }
+  100% {
+    transform: scale(1);
+  }
+} 

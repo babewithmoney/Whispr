@@ -1,24 +1,94 @@
-# README
+# Whispr - Anonymous Confessions Platform
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Whispr is a modern web application that allows users to share anonymous confessions and interact through emoji reactions. Built with Ruby on Rails and styled with Tailwind CSS, it features a responsive masonry layout and real-time updates.
 
-Things you may want to cover:
+## Features
 
-* Ruby version
+- 🎭 Anonymous confession sharing
+- 👥 No account required
+- 🎨 Modern dark theme UI
+- 📱 Responsive masonry layout
+- ❤️ Interactive emoji reactions
+- 🔥 Trending confessions
+- ⚡ Real-time updates with Turbo
 
-* System dependencies
+## Prerequisites
 
-* Configuration
+Before you begin, ensure you have the following installed:
+- Ruby 3.2.0 or higher
+- Rails 7.0.0 or higher
+- Node.js 18+ and Yarn
+- PostgreSQL 13+
 
-* Database creation
+## Setup Instructions
 
-* Database initialization
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/yourusername/whispr.git
+   cd whispr
+   ```
 
-* How to run the test suite
+2. **Install Ruby dependencies**
+   ```bash
+   bundle install
+   ```
 
-* Services (job queues, cache servers, search engines, etc.)
+3. **Install JavaScript dependencies**
+   ```bash
+   yarn install
+   ```
 
-* Deployment instructions
+4. **Setup database**
+   ```bash
+   # Create and setup the database
+   rails db:create
+   rails db:setup
 
-* ...
+   # Run migrations
+   rails db:migrate
+
+   # (Optional) Load sample data
+   rails db:seed
+   ```
+
+5. **Start the development server**
+   ```bash
+   # Start the Rails server
+   rails server
+
+   # In a separate terminal, start the asset compilation
+   yarn build --watch
+   ```
+
+6. **Visit the application**
+   Open your browser and navigate to `http://localhost:3000`
+
+## Development
+
+- The application uses Tailwind CSS for styling
+- Stimulus.js is used for JavaScript interactions
+- PostgreSQL is used as the database
+
+## Rate Limiting
+
+- Users are limited to 3 confessions per day (based on IP address)
+- Reactions are limited to one per confession per IP address
+
+## Testing
+
+Run the test suite with:
+```bash
+rails test
+```
+
+## Contributing
+
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details
