@@ -2,7 +2,7 @@
 Time.zone = 'UTC'
 
 # Set PostgreSQL timezone to match Rails
-ActiveRecord::Base.connection.execute("SET timezone TO 'UTC'")
+ActiveRecord::Base.connection.execute("SET timezone TO 'UTC'") rescue nil
 
-# Ensure Active Record uses the same timezone as Rails
-ActiveRecord::Base.default_timezone = :utc 
+# Configure Active Record time zone (using the new API)
+ActiveRecord.default_timezone = :utc 
