@@ -54,9 +54,6 @@ Rails.application.configure do
   config.active_job.queue_adapter = :solid_queue
   config.solid_queue.connects_to = { database: { writing: :queue } }
 
-  # Explicitly set database connection options to ensure TCP connections
-  config.active_record.database_configuration_file = Rails.root.join('config/database.yml')
-  
   # Disable connection pooling in favor of our explicit connections
   config.active_record.legacy_connection_handling = false
 
