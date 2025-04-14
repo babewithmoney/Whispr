@@ -12,34 +12,35 @@ class Confession < ApplicationRecord
   # 3. Time decay factor
   scope :trending, -> {
     joins(:reactions)
-      .group('confessions.id')
+      .group('confessions.id, confessions.created_at, confessions.body, confessions.ip_address')
       .select(
         'confessions.*, ' \
-        'COUNT(reactions.id) as total_reactions, ' \
-        'COUNT(CASE WHEN reactions.created_at > ? THEN 1 END) as recent_reactions, ' \
-        '(COUNT(CASE WHEN reactions.created_at > ? THEN 1 END) * 1.5 + ' \
-        'COUNT(reactions.id)) / POWER(EXTRACT(EPOCH FROM (now() - confessions.created_at)) / 3600 + 2, 1.5) ' \
-        'as trending_score',
-        24.hours.ago,
-        24.hours.ago
+        'COUNT(DISTINCT reactions.id) as total_reactions_count'
       )
-      .having('COUNT(reactions.id) >= 5') # Minimum reactions threshold
-      .order('trending_score DESC')
+      .having('COUNT(DISTINCT reactions.id) >= ?', 15)
+      .order(Arel.sql('COUNT(DISTINCT CASE WHEN reactions.created_at > NOW() - INTERVAL \'24 hours\' THEN reactions.id END) DESC'))
       .limit(20)
   }
 
   def trending?
-    return false if reactions.count < 5
+    return false unless reactions.exists?
+
+    # Get counts using explicit timezone handling
+    total_reactions = reactions.count
+    recent_reactions = reactions.where('reactions.created_at > ?', 24.hours.ago).count
+    hours_old = ((Time.current - created_at) / 1.hour).round
+
+    # Basic thresholds
+    return false if total_reactions < 15
+    return false if recent_reactions == 0
+    return false if hours_old > 72 # Don't show trending after 3 days
+
+    # Calculate score - simpler but effective formula
+    score = (recent_reactions * 2.0 + total_reactions) / Math.sqrt(hours_old + 2)
     
-    total_count = reactions.count
-    recent_count = reactions.where('created_at > ?', 24.hours.ago).count
-    hours_since_creation = ((Time.current - created_at) / 1.hour).round
-    
-    # Calculate trending score
-    trending_score = (recent_count * 1.5 + total_count) / ((hours_since_creation + 2) ** 1.5)
-    
-    # Post is trending if it has a good score and some recent activity
-    trending_score > 0.5 && recent_count > 0
+    # Post is trending if it has a good engagement ratio
+    recent_ratio = recent_reactions.to_f / total_reactions
+    score > 3.0 && recent_ratio > 0.1
   end
 
   def reaction_types_count
