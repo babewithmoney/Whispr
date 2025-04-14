@@ -17,9 +17,16 @@ if [ -n "$DATABASE_URL" ]; then
   export DATABASE_NAME=${DB_PARTS[7]}
 fi
 
-# Run database migrations
+# Ensure we're in production mode for migrations
+export RAILS_ENV=production
+
+# Run database migrations with error handling
 echo "Running database migrations..."
-bundle exec rails db:migrate
+if ! bundle exec rails db:migrate; then
+  echo "Migration failed. Attempting to create database..."
+  bundle exec rails db:create
+  bundle exec rails db:migrate
+fi
 
 # Compile assets
 echo "Precompiling assets..."
