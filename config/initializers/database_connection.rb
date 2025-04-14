@@ -5,11 +5,8 @@ Rails.application.config.after_initialize do
     # Set PostgreSQL environment variables to force TCP
     ENV['PGSSLMODE'] = 'require'
     
-    # Override only the base ActiveRecord connection since others will inherit
-    ActiveRecord::Base.connection_handler.retrieve_connection_pool("ActiveRecord::Base").disconnect!
-    
     # Get the configuration from database.yml
-    config = ActiveRecord::Base.configurations.configs_for(env_name: Rails.env, name: "primary").configuration_hash.merge(
+    config = Rails.application.config.database_configuration[Rails.env].merge(
       host: ENV.fetch('DATABASE_HOST', 'localhost'),
       port: ENV.fetch('DATABASE_PORT', 5432),
       adapter: 'postgresql'
